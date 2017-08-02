@@ -5,7 +5,7 @@ ext {
             minSdkVersion    : 15,
             targetSdkVersion : 25,
             versionCode      : 100,
-            versionName      : "1.0.0"
+            versionName      : '1.0.0'
     ]
 
     dependencies = [
@@ -28,6 +28,9 @@ ext {
             'rxbinding-appcompat-v7'   : 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.0.0',
             'rxbinding-design'         : 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0',
             'rxbinding-recyclerview-v7': 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0',
+            //Butter Knife
+            'butterknife'              : 'com.jakewharton:butterknife:8.7.0',
+            'butterknife-compiler'     : 'com.jakewharton:butterknife-compiler:8.7.0',//annotationProcessor
             //Retrofit
             'retrofit'                 : 'com.squareup.retrofit2:retrofit:2.3.0',
             'adapter-rxjava2'          : 'com.squareup.retrofit2:adapter-rxjava2:2.3.0',
@@ -42,8 +45,6 @@ ext {
             'utils'                    : 'com.github.sunxiaolei:my-utils:1.0.6',
             //Swipeback
             'swipeback'                : 'com.github.sunxiaolei:swipeback:1.0.0',
-            //Adapter
-            'adapter-helper'           : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18',
             //Guava
             'guava'                    : 'com.google.guava:guava:22.0-android',
             //RxPermissions
@@ -57,5 +58,11 @@ ext {
             'leakcanary-debug'         : 'com.squareup.leakcanary:leakcanary-android:1.5.1',//debugCompile
             'leakcanary-release'       : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1',//releaseCompile
             'leakcanary-test'          : 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.1',//testCompile
+            //Database
+            'litepal'                  : 'org.litepal.android:core:1.5.1',
+            //ui
+            'vlayout'                  : 'com.alibaba.android:vlayout:1.0.9@aar',//transitive = true
+            'adapter-helper'           : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18',
+
     ]
 }
