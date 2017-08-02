@@ -15,7 +15,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.p1_activity_main);
+        String str = getIntent().getStringExtra("data");
         TextView tv = (TextView) findViewById(R.id.tv_test);
-        tv.setText("Plugin 1 update");
+        tv.setText(str == null ? "Plugin 1 update" : str);
     }
 }

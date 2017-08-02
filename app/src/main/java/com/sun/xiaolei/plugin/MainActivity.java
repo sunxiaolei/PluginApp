@@ -37,14 +37,13 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "no found plugin!!!", Toast.LENGTH_SHORT).show();
         }
 
-        LoadedPlugin plugin = pluginManager.getLoadedPlugin("");
-        plugin.getPluginManager();
         findViewById(R.id.btn_open_1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClassName("com.sun.xiaolei.plugintest1",
                         "com.sun.xiaolei.plugintest1.MainActivity");
+                intent.putExtra("data", "Data from main");
                 startActivity(intent);
             }
         });
