@@ -13,12 +13,9 @@ import com.sun.xiaolei.plugin.db.model.PluginModel;
 
 import org.litepal.crud.DataSupport;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import io.reactivex.Flowable;
-import io.reactivex.functions.Consumer;
 
 /**
  * Created by sunxl8 on 2017/8/2.
@@ -63,16 +60,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onItemDragEnd(RecyclerView.ViewHolder viewHolder, int pos) {
-//                for (int i = 0; i < mAdapter.getItemCount(); i++) {
-//                    PluginModel m = DataSupport.find(PluginModel.class, mAdapter.getItem(i).getId());
-//                    m.setOrder(mAdapter.getParentPosition(mAdapter.getItem(i)));
-//                    m.saveOrUpdate();
-//                }
-//                DataSupport.deleteAll(PluginModel.class);
-                mAdapter.getItem(from).setOrder(pos);
-                mAdapter.getItem(pos).setOrder(from);
-                DataSupport.saveAll(mAdapter.getData());
-                DatabaseHelper.queryPluginList();
+                DatabaseHelper.updatePluginPos(mAdapter.getData());
             }
         });
 

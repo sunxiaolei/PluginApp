@@ -18,6 +18,6 @@ public class MainAdapter extends BaseItemDraggableAdapter<PluginModel, BaseViewH
 
     @Override
     protected void convert(BaseViewHolder helper, PluginModel item) {
-        helper.setText(R.id.tv_item_main, item.getName());
+        helper.setText(R.id.tv_item_main, item.getName() + "--order:" + item.getOrder());
     }
 }

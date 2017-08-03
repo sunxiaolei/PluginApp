@@ -18,12 +18,11 @@ public class DatabaseHelper {
                 .find(PluginModel.class);
     }
 
-    public static void swopPlugin(PluginModel mFrom, PluginModel mTo) {
-        int orderFrom = mFrom.getOrder();
-        int orderTo = mTo.getOrder();
-        mFrom.setOrder(orderTo);
-        mTo.setOrder(orderFrom);
-        mFrom.saveOrUpdate();
-        mTo.saveOrUpdate();
+    public static void updatePluginPos(List<PluginModel> list) {
+        for (int i = 0; i < list.size(); i++) {
+            PluginModel model = list.get(i);
+            model.setOrder(i);
+            model.saveOrUpdate("id = ?", String.valueOf(model.getId()));
+        }
     }
 }
