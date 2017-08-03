@@ -1,21 +1,34 @@
 package com.sun.xiaolei.plugin.ui;
 
+import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
+import com.didi.virtualapk.PluginManager;
+import com.jakewharton.rxbinding2.view.RxView;
+import com.sun.xiaolei.plugin.AssetsUtils;
 import com.sun.xiaolei.plugin.R;
+import com.sun.xiaolei.plugin.TestActivity;
 import com.sun.xiaolei.plugin.base.BaseActivity;
 import com.sun.xiaolei.plugin.db.DatabaseHelper;
 import com.sun.xiaolei.plugin.db.model.PluginModel;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
+
+import static android.os.Environment.getExternalStorageDirectory;
 
 /**
  * Created by sunxl8 on 2017/8/2.
@@ -23,6 +36,8 @@ import butterknife.BindView;
 
 public class MainActivity extends BaseActivity {
 
+    @BindView(R.id.iv_add)
+    ImageView ivAdd;
     @BindView(R.id.rv_main)
     RecyclerView rvMain;
 
@@ -33,12 +48,16 @@ public class MainActivity extends BaseActivity {
         return R.layout.activity_main;
     }
 
-    int from;
-
     @Override
     protected void init() {
+        //添加插件
+        RxView.clicks(ivAdd)
+                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(o -> {
+
+                });
         rvMain.setLayoutManager(new GridLayoutManager(this, 3));
-        mAdapter = new MainAdapter();
+        mAdapter = new MainAdapter(this);
         rvMain.setAdapter(mAdapter);
 
         ItemDragAndSwipeCallback itemDragAndSwipeCallback = new ItemDragAndSwipeCallback(mAdapter);
@@ -50,7 +69,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onItemDragStart(RecyclerView.ViewHolder viewHolder, int pos) {
-                from = pos;
+
             }
 
             @Override
@@ -68,18 +87,51 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    /**
+     * 获取插件列表
+     */
     private void getPluginList() {
         List<PluginModel> test = DatabaseHelper.queryPluginList();
         if (test.size() == 0) {
-            for (int i = 0; i < 8; i++) {
-                PluginModel model = new PluginModel();
-                model.setName("==" + i + "==");
-                model.setOrder(i);
-                test.add(model);
-            }
+            PluginModel pDoubanMoment = new PluginModel();
+            pDoubanMoment.setName("豆瓣一刻");
+            pDoubanMoment.setOrder(1);
+            pDoubanMoment.setPkgName("com.sun.xiaolei.plugindoubanmoment");
+            test.add(pDoubanMoment);
             DataSupport.saveAll(test);
             DatabaseHelper.queryPluginList();
         }
+        for (int i = 0; i < test.size(); i++) {
+            loadPlugin(test.get(i));
+        }
         mAdapter.setNewData(test);
+    }
+
+    /**
+     * 复制并加载
+     *
+     * @param plugin
+     */
+    private void loadPlugin(PluginModel plugin) {
+        AssetsUtils.getInstance(this).copyAssetsToSD("plugins", "pluginapp/plugins").setFileOperateCallback(new AssetsUtils.FileOperateCallback() {
+            @Override
+            public void onSuccess() {
+                File apk = new File(getExternalStorageDirectory(), "pluginapp/plugins/" + plugin.getPkgName() + ".apk");
+                if (apk.exists()) {
+                    try {
+                        PluginManager.getInstance(MainActivity.this).loadPlugin(apk);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(MainActivity.this, "no found plugin!!!", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Toast.makeText(MainActivity.this, "copy failed: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
