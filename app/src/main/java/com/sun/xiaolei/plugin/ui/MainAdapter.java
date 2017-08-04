@@ -2,7 +2,6 @@ package com.sun.xiaolei.plugin.ui;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -35,7 +34,7 @@ public class MainAdapter extends BaseItemDraggableAdapter<PluginModel, BaseViewH
         }
         helper.setOnClickListener(R.id.layout_item_main, v -> {
             Intent intent = new Intent();
-            intent.setClassName(item.getPkgName(), item.getPkgName() + ".MainActivity");
+            intent.setClassName(item.getPkgName(), item.getPkgName() + ".ui.MainActivity");
             intent.putExtra("data", "Data from main");
             mContext.startActivity(intent);
         });
