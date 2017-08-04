@@ -1,4 +1,4 @@
-package com.sun.xiaolei.plugin;
+package com.sun.xiaolei.plugin.utils;
 
 import android.content.Context;
 import android.os.Environment;
@@ -89,15 +89,15 @@ public class AssetsUtils {
             } else {
                 File outFile = new File(Environment.getExternalStorageDirectory(), dstPath);
                 InputStream is = context.getAssets().open(srcPath);
-                OutputStream fos = new FileOutputStream(outFile);
+                OutputStream os = new FileOutputStream(outFile);
                 byte[] buffer = new byte[1024];
                 int byteCount;
                 while ((byteCount = is.read(buffer)) != -1) {
-                    fos.write(buffer, 0, byteCount);
+                    os.write(buffer, 0, byteCount);
                 }
-                fos.flush();
+                os.flush();
                 is.close();
-                fos.close();
+                os.close();
             }
             isSuccess = true;
         } catch (Exception e) {
@@ -108,7 +108,6 @@ public class AssetsUtils {
     }
 
     public interface FileOperateCallback {
-
         void onSuccess();
 
         void onFailed(String error);

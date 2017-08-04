@@ -14,9 +14,19 @@ public class PluginModel extends DataSupport {
 
     private String icUrl;
 
+    private int icRes;
+
     private String name;
 
     private int order;
+
+    public int getIcRes() {
+        return icRes;
+    }
+
+    public void setIcRes(int icRes) {
+        this.icRes = icRes;
+    }
 
     public int getId() {
         return id;

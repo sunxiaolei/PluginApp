@@ -44,4 +44,5 @@ dependencies {
     compile rootProject.ext.dependencies['adapter-helper']
     compile rootProject.ext.dependencies['utils']
     compile rootProject.ext.dependencies['litepal']
+    compile rootProject.ext.dependencies['glide']
 }

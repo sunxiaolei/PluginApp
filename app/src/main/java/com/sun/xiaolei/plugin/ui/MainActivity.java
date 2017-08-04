@@ -1,21 +1,17 @@
 package com.sun.xiaolei.plugin.ui;
 
-import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.didi.virtualapk.PluginManager;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.sun.xiaolei.plugin.AssetsUtils;
+import com.sun.xiaolei.plugin.utils.AssetsUtils;
 import com.sun.xiaolei.plugin.R;
-import com.sun.xiaolei.plugin.TestActivity;
 import com.sun.xiaolei.plugin.base.BaseActivity;
 import com.sun.xiaolei.plugin.db.DatabaseHelper;
 import com.sun.xiaolei.plugin.db.model.PluginModel;
@@ -29,6 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 
 import static android.os.Environment.getExternalStorageDirectory;
+import static com.sun.xiaolei.plugin.Constant.PLUGIN_PATH;
 
 /**
  * Created by sunxl8 on 2017/8/2.
@@ -97,6 +94,7 @@ public class MainActivity extends BaseActivity {
             pDoubanMoment.setName("豆瓣一刻");
             pDoubanMoment.setOrder(1);
             pDoubanMoment.setPkgName("com.sun.xiaolei.plugindoubanmoment");
+            pDoubanMoment.setIcRes(R.drawable.ic_plugin_dbmoment);
             test.add(pDoubanMoment);
             DataSupport.saveAll(test);
             DatabaseHelper.queryPluginList();
@@ -113,10 +111,10 @@ public class MainActivity extends BaseActivity {
      * @param plugin
      */
     private void loadPlugin(PluginModel plugin) {
-        AssetsUtils.getInstance(this).copyAssetsToSD("plugins", "pluginapp/plugins").setFileOperateCallback(new AssetsUtils.FileOperateCallback() {
+        AssetsUtils.getInstance(this).copyAssetsToSD("plugins", PLUGIN_PATH).setFileOperateCallback(new AssetsUtils.FileOperateCallback() {
             @Override
             public void onSuccess() {
-                File apk = new File(getExternalStorageDirectory(), "pluginapp/plugins/" + plugin.getPkgName() + ".apk");
+                File apk = new File(getExternalStorageDirectory(), PLUGIN_PATH + plugin.getPkgName() + ".apk");
                 if (apk.exists()) {
                     try {
                         PluginManager.getInstance(MainActivity.this).loadPlugin(apk);

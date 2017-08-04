@@ -3,7 +3,7 @@
     <!-- 数据库名字 -->
     <dbname value="PluginApp.db"/>
     <!-- 数据库版本号 -->
-    <version value="2"/>
+    <version value="3"/>
     <!-- 表 -->
     <list>
 
