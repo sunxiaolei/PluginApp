@@ -9,7 +9,7 @@ public class SchedulersCompat {
 
     private final static FlowableTransformer ioTransformer = upstream ->
             upstream.subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread());
+                    .observeOn(AndroidSchedulers.mainThread());
 
     public static <T> FlowableTransformer<T, T> applyIoSchedulers() {
         return (FlowableTransformer<T, T>) ioTransformer;

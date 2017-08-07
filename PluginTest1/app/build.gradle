@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.didi.virtualapk.plugin'
+apply plugin: 'me.tatarka.retrolambda'
 
 android {
     compileSdkVersion rootProject.ext.android.compileSdkVersion as int
@@ -18,17 +19,24 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
 }
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile rootProject.ext.dependencies['appcompat-v7']
     compile rootProject.ext.dependencies['virtualapk']
+    compile rootProject.ext.dependencies['recyclerview-v7']
+    compile rootProject.ext.dependencies['adapter-helper']
+    compile rootProject.ext.dependencies['utils']
 }
 
 // 插件配置信息,放在文件最下面
 virtualApk {
-    packageId = 0x6f             // 插件资源id，避免资源id冲突
+    packageId = 0x0f             // 插件资源id，避免资源id冲突
     targetHost = '../../PluginMain/app'      // 宿主工程的路径
     applyHostMapping = true      // 插件编译时是否启用应用宿主的apply mapping
 }

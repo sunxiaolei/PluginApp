@@ -19,6 +19,11 @@ public class BaseApplication extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         PluginManager.getInstance(base).init();
+    }
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
         Utils.init(this);
         LitePal.initialize(this);
     }

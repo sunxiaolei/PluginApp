@@ -1,6 +1,7 @@
 package com.sun.xiaolei.plugindoubanmoment.ui;
 
 import android.content.Context;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
@@ -25,11 +26,9 @@ public class MainAdapter extends BaseQuickAdapter<ColumnBean, BaseViewHolder> {
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, ColumnBean item) {
+    protected void convert(BaseViewHolder helper, final ColumnBean item) {
         helper.setText(R.id.tv_item_columns, item.getName());
         Glide.with(mContext).load(item.getIcon()).into((ImageView) helper.getView(R.id.iv_item_columns));
-        helper.setOnClickListener(R.id.layout_item_columns, v -> {
-            ColumnPostActivity.startThisActivity(mContext, item.getId());
-        });
+        helper.setOnClickListener(R.id.layout_item_columns, v -> ColumnPostActivity.startThisActivity(mContext, item.getId()));
     }
 }

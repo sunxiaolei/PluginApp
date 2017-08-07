@@ -10,7 +10,6 @@ import com.sun.xiaolei.plugindoubanmoment.base.BaseActivity;
 import com.sun.xiaolei.plugindoubanmoment.net.Request;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import butterknife.BindView;
 import sunxl8.myutils.ToastUtils;
 
 /**
@@ -19,8 +18,7 @@ import sunxl8.myutils.ToastUtils;
 
 public class ColumnPostActivity extends BaseActivity {
 
-    @BindView(R.id.rv_columnpost)
-    RecyclerView mRecyclerView;
+    private RecyclerView mRecyclerView;
     private ColumnAdapter mAdapter;
 
     @Override
@@ -30,6 +28,7 @@ public class ColumnPostActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.rv_columnpost);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new ColumnAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
@@ -40,11 +39,9 @@ public class ColumnPostActivity extends BaseActivity {
     public void getColumnPost(int id) {
         Request.getColumnPost(id, 10)
                 .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(dto -> {
-                    mAdapter.setNewData(dto.getPosts());
-                }, throwable -> {
-                    ToastUtils.shortShow(throwable.getMessage());
-                });
+                .subscribe(dto -> mAdapter.setNewData(dto.getPosts()),
+                        throwable -> ToastUtils.shortShow(throwable.getMessage()));
+
     }
 
     public static void startThisActivity(Context context, int columnId) {

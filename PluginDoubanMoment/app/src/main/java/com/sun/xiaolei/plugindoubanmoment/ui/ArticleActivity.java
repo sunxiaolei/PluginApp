@@ -9,7 +9,6 @@ import com.sun.xiaolei.plugindoubanmoment.R;
 import com.sun.xiaolei.plugindoubanmoment.base.BaseActivity;
 import com.sun.xiaolei.plugindoubanmoment.net.dto.PostsBean;
 
-import butterknife.BindView;
 import sunxl8.myutils.NetworkUtils;
 
 /**
@@ -18,8 +17,7 @@ import sunxl8.myutils.NetworkUtils;
 
 public class ArticleActivity extends BaseActivity {
 
-    @BindView(R.id.web_moment_detail)
-    WebView mWebView;
+    private WebView mWebView;
 
     private PostsBean bean;
 
@@ -30,6 +28,7 @@ public class ArticleActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        mWebView = (WebView) findViewById(R.id.web_moment_detail);
         bean = (PostsBean) getIntent().getSerializableExtra("bean");
 
         WebSettings settings = mWebView.getSettings();

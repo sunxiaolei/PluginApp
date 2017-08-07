@@ -8,16 +8,13 @@ import com.sun.xiaolei.plugindoubanmoment.base.BaseActivity;
 import com.sun.xiaolei.plugindoubanmoment.net.Request;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import butterknife.BindView;
 import sunxl8.myutils.ToastUtils;
 
 public class MainActivity extends BaseActivity {
 
-    @BindView(R.id.rv_main)
-    RecyclerView rvMain;
+    private RecyclerView rvMain;
 
-    //    private MainAdapter mAdapter;
-    private DbMomentAdapter mAdapter;
+    private MainAdapter mAdapter;
 
     @Override
     protected int setContentViewId() {
@@ -26,20 +23,17 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        rvMain = (RecyclerView) findViewById(R.id.rv_main);
         rvMain.setLayoutManager(new LinearLayoutManager(this));
-//        mAdapter = new MainAdapter(this);
+        mAdapter = new MainAdapter(this);
+        rvMain.setAdapter(mAdapter);
         getColumns();
     }
 
     private void getColumns() {
         Request.getColumns()
                 .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(dto -> {
-                    mAdapter = new DbMomentAdapter(this, dto.getColumns());
-                    rvMain.setAdapter(mAdapter);
-//                    mAdapter.setNewData(dto.getColumns());
-                }, throwable -> {
-                    ToastUtils.shortShow(throwable.getMessage());
-                });
+                .subscribe(dto -> mAdapter.setNewData(dto.getColumns()),
+                        throwable -> ToastUtils.shortShow(throwable.getMessage()));
     }
 }

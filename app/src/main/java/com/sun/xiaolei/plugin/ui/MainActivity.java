@@ -90,39 +90,44 @@ public class MainActivity extends BaseActivity {
     private void getPluginList() {
         List<PluginModel> test = DatabaseHelper.queryPluginList();
         if (test.size() == 0) {
+            PluginModel pTest = new PluginModel();
+            pTest.setName("Test");
+            pTest.setOrder(1);
+            pTest.setPkgName("com.sun.xiaolei.plugintest1");
+            pTest.setIcRes(R.mipmap.ic_launcher);
+            test.add(pTest);
             PluginModel pDoubanMoment = new PluginModel();
             pDoubanMoment.setName("豆瓣一刻");
-            pDoubanMoment.setOrder(1);
+            pDoubanMoment.setOrder(2);
             pDoubanMoment.setPkgName("com.sun.xiaolei.plugindoubanmoment");
             pDoubanMoment.setIcRes(R.drawable.ic_plugin_dbmoment);
             test.add(pDoubanMoment);
             DataSupport.saveAll(test);
             DatabaseHelper.queryPluginList();
         }
-        for (int i = 0; i < test.size(); i++) {
-            loadPlugin(test.get(i));
-        }
+        loadPlugin(test);
+
         mAdapter.setNewData(test);
     }
 
     /**
      * 复制并加载
-     *
-     * @param plugin
      */
-    private void loadPlugin(PluginModel plugin) {
+    private void loadPlugin(List<PluginModel> plugins) {
         AssetsUtils.getInstance(this).copyAssetsToSD("plugins", PLUGIN_PATH).setFileOperateCallback(new AssetsUtils.FileOperateCallback() {
             @Override
             public void onSuccess() {
-                File apk = new File(getExternalStorageDirectory(), PLUGIN_PATH + plugin.getPkgName() + ".apk");
-                if (apk.exists()) {
-                    try {
-                        PluginManager.getInstance(MainActivity.this).loadPlugin(apk);
-                    } catch (Exception e) {
-                        e.printStackTrace();
+                for (int i = 0; i < plugins.size(); i++) {
+                    File apk = new File(getExternalStorageDirectory(), PLUGIN_PATH + plugins.get(i).getPkgName() + ".apk");
+                    if (apk.exists()) {
+                        try {
+                            PluginManager.getInstance(MainActivity.this).loadPlugin(apk);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    } else {
+                        Toast.makeText(MainActivity.this, "no found plugin!!!", Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    Toast.makeText(MainActivity.this, "no found plugin!!!", Toast.LENGTH_SHORT).show();
                 }
             }
 
