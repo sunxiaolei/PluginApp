@@ -1,8 +1,13 @@
 package com.sun.xiaolei.plugin.ui;
 
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -10,6 +15,8 @@ import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.didi.virtualapk.PluginManager;
 import com.jakewharton.rxbinding2.view.RxView;
+import com.jakewharton.rxbinding2.widget.RxCompoundButton;
+import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.sun.xiaolei.plugin.utils.AssetsUtils;
 import com.sun.xiaolei.plugin.R;
 import com.sun.xiaolei.plugin.base.BaseActivity;
@@ -23,6 +30,9 @@ import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
+import sunxl8.myutils.SPUtils;
 
 import static android.os.Environment.getExternalStorageDirectory;
 import static com.sun.xiaolei.plugin.Constant.PLUGIN_PATH;
@@ -33,10 +43,14 @@ import static com.sun.xiaolei.plugin.Constant.PLUGIN_PATH;
 
 public class MainActivity extends BaseActivity {
 
+    @BindView(R.id.drawer_main)
+    FlowingDrawer mDrawer;
     @BindView(R.id.iv_add)
     ImageView ivAdd;
     @BindView(R.id.rv_main)
     RecyclerView rvMain;
+    @BindView(R.id.switch_mode)
+    SwitchCompat switchMode;
 
     private MainAdapter mAdapter;
 
@@ -61,7 +75,7 @@ public class MainActivity extends BaseActivity {
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(itemDragAndSwipeCallback);
         itemTouchHelper.attachToRecyclerView(rvMain);
 
-        mAdapter.enableDragItem(itemTouchHelper, R.id.tv_item_main, true);
+        mAdapter.enableDragItem(itemTouchHelper, R.id.layout_item_main, true);
         mAdapter.setOnItemDragListener(new OnItemDragListener() {
 
             @Override
@@ -80,8 +94,18 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        getPluginList();
+        switchMode.setChecked(SPUtils.getInstance("SP_MAIN").getBoolean("mode", false));
+        switchMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+            }
+            SPUtils.getInstance("SP_MAIN").put("mode", isChecked);
+            recreate();
+        });
 
+        getPluginList();
     }
 
     /**

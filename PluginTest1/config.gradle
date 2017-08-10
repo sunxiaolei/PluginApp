@@ -29,8 +29,8 @@ ext {
             'rxbinding-design'         : 'com.jakewharton.rxbinding2:rxbinding-design:2.0.0',
             'rxbinding-recyclerview-v7': 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.0.0',
             //Butter Knife
-            'butterknife'              : 'com.jakewharton:butterknife:8.4.0',
-            'butterknife-compiler'     : 'com.jakewharton:butterknife-compiler:8.4.0',//annotationProcessor
+            'butterknife'              : 'com.jakewharton:butterknife:8.7.0',
+            'butterknife-compiler'     : 'com.jakewharton:butterknife-compiler:8.7.0',//annotationProcessor
             //Retrofit
             'retrofit'                 : 'com.squareup.retrofit2:retrofit:2.3.0',
             'adapter-rxjava2'          : 'com.squareup.retrofit2:adapter-rxjava2:2.3.0',
@@ -61,8 +61,10 @@ ext {
             //Database
             'litepal'                  : 'org.litepal.android:core:1.5.1',
             //ui
+            'nineoldandroids'          : 'com.nineoldandroids:library:2.4.0',
             'vlayout'                  : 'com.alibaba.android:vlayout:1.0.9@aar',//transitive = true
             'adapter-helper'           : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18',
+            'flowingdrawer'            : 'com.mxn.soul:flowingdrawer-core:2.0.0',
 
     ]
 }

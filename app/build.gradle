@@ -45,4 +45,6 @@ dependencies {
     compile rootProject.ext.dependencies['utils']
     compile rootProject.ext.dependencies['litepal']
     compile rootProject.ext.dependencies['glide']
+    compile rootProject.ext.dependencies['flowingdrawer']
+    compile rootProject.ext.dependencies['nineoldandroids']
 }
