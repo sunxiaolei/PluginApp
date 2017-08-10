@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.v7.app.AppCompatDelegate;
 
 import com.didi.virtualapk.PluginManager;
+import com.sun.xiaolei.plugin.Constant;
 
 import org.litepal.LitePal;
 
@@ -28,7 +29,7 @@ public class BaseApplication extends Application {
         super.onCreate();
         Utils.init(this);
         LitePal.initialize(this);
-        if (SPUtils.getInstance("SP_MAIN").getBoolean("mode", false)) {
+        if (SPUtils.getInstance(Constant.SP_NAME).getBoolean(Constant.SP_KEY_MODE, false)) {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         } else {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);

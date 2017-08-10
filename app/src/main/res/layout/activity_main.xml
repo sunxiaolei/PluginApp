@@ -23,6 +23,8 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
                 android:paddingLeft="18dp"
                 android:paddingRight="18dp"
                 app:srcCompat="@drawable/ic_add"/>
@@ -35,8 +37,8 @@
         android:id="@+id/drawer_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:edMenuBackground="#dddddd"
-        app:edMenuSize="260dp"
+        app:edMenuBackground="@color/colorDrawerBg"
+        app:edMenuSize="240dp"
         app:edPosition="1">
 
         <android.support.v7.widget.RecyclerView

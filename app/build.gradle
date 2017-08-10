@@ -47,4 +47,5 @@ dependencies {
     compile rootProject.ext.dependencies['glide']
     compile rootProject.ext.dependencies['flowingdrawer']
     compile rootProject.ext.dependencies['nineoldandroids']
+    compile rootProject.ext.dependencies['cardview-v7']
 }

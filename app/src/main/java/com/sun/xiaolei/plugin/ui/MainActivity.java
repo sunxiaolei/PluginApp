@@ -17,6 +17,7 @@ import com.didi.virtualapk.PluginManager;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.jakewharton.rxbinding2.widget.RxCompoundButton;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
+import com.sun.xiaolei.plugin.Constant;
 import com.sun.xiaolei.plugin.utils.AssetsUtils;
 import com.sun.xiaolei.plugin.R;
 import com.sun.xiaolei.plugin.base.BaseActivity;
@@ -94,14 +95,14 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        switchMode.setChecked(SPUtils.getInstance("SP_MAIN").getBoolean("mode", false));
+        switchMode.setChecked(SPUtils.getInstance(Constant.SP_NAME).getBoolean(Constant.SP_KEY_MODE, false));
         switchMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             }
-            SPUtils.getInstance("SP_MAIN").put("mode", isChecked);
+            SPUtils.getInstance(Constant.SP_NAME).put(Constant.SP_KEY_MODE, isChecked);
             recreate();
         });
 
