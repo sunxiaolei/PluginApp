@@ -18,9 +18,12 @@ import sunxl8.myutils.Utils;
 
 public class BaseApplication extends Application {
 
+    public static Context mContext;
+
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
+        mContext = base;
         PluginManager.getInstance(base).init();
     }
 

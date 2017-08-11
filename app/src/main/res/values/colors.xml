@@ -6,4 +6,6 @@
 
     <color name="colorBg">#EEEEEE</color>
     <color name="colorDrawerBg">#F5F5F5</color>
+
+    <color name="colorTextTitle">#F5F5F5</color>
 </resources>

@@ -1,13 +1,11 @@
 package com.sun.xiaolei.plugin.ui;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.widget.CompoundButton;
+import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -15,7 +13,6 @@ import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.didi.virtualapk.PluginManager;
 import com.jakewharton.rxbinding2.view.RxView;
-import com.jakewharton.rxbinding2.widget.RxCompoundButton;
 import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.sun.xiaolei.plugin.Constant;
 import com.sun.xiaolei.plugin.utils.AssetsUtils;
@@ -23,16 +20,18 @@ import com.sun.xiaolei.plugin.R;
 import com.sun.xiaolei.plugin.base.BaseActivity;
 import com.sun.xiaolei.plugin.db.DatabaseHelper;
 import com.sun.xiaolei.plugin.db.model.PluginModel;
+import com.sun.xiaolei.plugin.utils.SchedulersCompat;
+import com.sun.xiaolei.plugin.utils.SnackBarUtils;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.litepal.crud.DataSupport;
 
 import java.io.File;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.functions.Consumer;
+import io.reactivex.Flowable;
 import sunxl8.myutils.SPUtils;
 
 import static android.os.Environment.getExternalStorageDirectory;
@@ -162,4 +161,24 @@ public class MainActivity extends BaseActivity {
             }
         });
     }
+
+    private boolean exitApp = false;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (exitApp) {
+                finish();
+            } else {
+                SnackBarUtils.showShort(getWindow().getDecorView(), "再按一次退出应用程序", "退出", v -> finish());
+                exitApp = true;
+                Flowable.timer(2000, TimeUnit.MILLISECONDS)
+                        .compose(SchedulersCompat.applyIoSchedulers())
+                        .subscribe(aLong -> exitApp = false);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
 }
