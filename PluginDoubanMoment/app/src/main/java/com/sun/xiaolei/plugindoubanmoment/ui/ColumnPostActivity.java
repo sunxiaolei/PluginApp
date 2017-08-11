@@ -37,10 +37,17 @@ public class ColumnPostActivity extends BaseActivity {
     }
 
     public void getColumnPost(int id) {
+        showLoading();
         Request.getColumnPost(id, 10)
                 .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(dto -> mAdapter.setNewData(dto.getPosts()),
-                        throwable -> ToastUtils.shortShow(throwable.getMessage()));
+                .subscribe(dto -> {
+                            dismissDialog();
+                            mAdapter.setNewData(dto.getPosts());
+                        },
+                        throwable -> {
+                            dismissDialog();
+                            ToastUtils.shortShow(throwable.getMessage());
+                        });
 
     }
 

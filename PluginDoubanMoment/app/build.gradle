@@ -46,6 +46,7 @@ dependencies {
     compile rootProject.ext.dependencies['utils']
     compile rootProject.ext.dependencies['glide']
     compile rootProject.ext.dependencies['swipeback']
+    compile rootProject.ext.dependencies['loading']
 }
 
 // 插件配置信息,放在文件最下面

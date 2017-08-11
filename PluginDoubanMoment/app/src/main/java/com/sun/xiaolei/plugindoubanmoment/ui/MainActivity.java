@@ -31,9 +31,16 @@ public class MainActivity extends BaseActivity {
     }
 
     private void getColumns() {
+        showLoading();
         Request.getColumns()
                 .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(dto -> mAdapter.setNewData(dto.getColumns()),
-                        throwable -> ToastUtils.shortShow(throwable.getMessage()));
+                .subscribe(dto -> {
+                            dismissDialog();
+                            mAdapter.setNewData(dto.getColumns());
+                        },
+                        throwable -> {
+                            dismissDialog();
+                            ToastUtils.shortShow(throwable.getMessage());
+                        });
     }
 }

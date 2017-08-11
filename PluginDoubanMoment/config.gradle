@@ -65,6 +65,7 @@ ext {
             'vlayout'                  : 'com.alibaba.android:vlayout:1.0.9@aar',//transitive = true
             'adapter-helper'           : 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.18',
             'flowingdrawer'            : 'com.mxn.soul:flowingdrawer-core:2.0.0',
+            'loading'                  : 'com.github.sunxiaolei:LoadingDialog:1.0.0',
 
     ]
 }

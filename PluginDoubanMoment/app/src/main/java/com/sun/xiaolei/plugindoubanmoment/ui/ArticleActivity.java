@@ -2,8 +2,12 @@ package com.sun.xiaolei.plugindoubanmoment.ui;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.webkit.WebResourceError;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import com.sun.xiaolei.plugindoubanmoment.R;
 import com.sun.xiaolei.plugindoubanmoment.base.BaseActivity;
@@ -50,6 +54,33 @@ public class ArticleActivity extends BaseActivity {
         mWebView.canGoForward();
 
         mWebView.loadUrl(bean.getUrl());
+        mWebView.setWebViewClient(new WebViewClient() {
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
+
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+                showLoading();
+            }
+
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+                dismissDialog();
+            }
+
+            @Override
+            public void onReceivedError(WebView view, WebResourceRequest request, WebResourceError error) {
+                super.onReceivedError(view, request, error);
+                dismissDialog();
+            }
+        });
+
     }
 
     public static void startThisActivity(Context context, PostsBean bean) {
