@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#33A1C9</color>
     <color name="colorAccent">#33A1C9</color>
 
+    <color name="colorHalfTrans">#00000000</color>
+
     <color name="colorBg">#EEEEEE</color>
     <color name="colorTextItem">#333333</color>
+    <color name="colorTextTitle">#E5E5E5</color>
 </resources>

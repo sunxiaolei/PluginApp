@@ -18,11 +18,12 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected int setContentViewId() {
-        return R.layout.p_dm_activity_main;
+        return R.layout.p2_activity_main;
     }
 
     @Override
     protected void init() {
+        tvTitle.setText("豆瓣一刻");
         rvMain = (RecyclerView) findViewById(R.id.rv_main);
         rvMain.setLayoutManager(new LinearLayoutManager(this));
         mAdapter = new MainAdapter(this);

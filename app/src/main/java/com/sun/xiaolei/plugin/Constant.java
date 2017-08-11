@@ -6,7 +6,7 @@ package com.sun.xiaolei.plugin;
 
 public class Constant {
 
-    public static final String SP_NAME = "SP";
-    public static final String SP_KEY_MODE = "MODE";
+    public static final String SP_NAME = "SP_MAIN";
+    public static final String SP_KEY_MODE = "SP_KEY_MODE";
     public static final String PLUGIN_PATH = "pluginapp/plugins/";
 }

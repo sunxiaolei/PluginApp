@@ -1,14 +1,10 @@
 package com.sun.xiaolei.plugindoubanmoment.ui;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.sun.xiaolei.plugindoubanmoment.R;
-import com.sun.xiaolei.plugindoubanmoment.net.dto.ColumnBean;
 import com.sun.xiaolei.plugindoubanmoment.net.dto.PostsBean;
 
 /**
@@ -20,7 +16,7 @@ public class ColumnAdapter extends BaseQuickAdapter<PostsBean, BaseViewHolder> {
     private Context mContext;
 
     public ColumnAdapter(Context context) {
-        super(R.layout.p_dm_item_column);
+        super(R.layout.p2_item_column);
         this.mContext = context;
     }
 

@@ -3,6 +3,7 @@ package com.sun.xiaolei.plugindoubanmoment.ui;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.view.KeyEvent;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
@@ -27,13 +28,15 @@ public class ArticleActivity extends BaseActivity {
 
     @Override
     protected int setContentViewId() {
-        return R.layout.p_dm_activity_article;
+        return R.layout.p2_activity_article;
     }
 
     @Override
     protected void init() {
-        mWebView = (WebView) findViewById(R.id.web_moment_detail);
         bean = (PostsBean) getIntent().getSerializableExtra("bean");
+        tvTitle.setText(bean.getTitle());
+
+        mWebView = (WebView) findViewById(R.id.web_moment_detail);
 
         WebSettings settings = mWebView.getSettings();
         settings.setJavaScriptEnabled(true);
@@ -81,6 +84,15 @@ public class ArticleActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if ((keyCode == KeyEvent.KEYCODE_BACK) && mWebView.canGoBack()) {
+            mWebView.goBack();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     public static void startThisActivity(Context context, PostsBean bean) {

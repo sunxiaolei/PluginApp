@@ -3,12 +3,19 @@ package com.sun.xiaolei.plugindoubanmoment.base;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatImageView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.sun.xiaolei.plugindoubanmoment.R;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.wang.avi.indicators.BallBeatIndicator;
 
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Consumer;
 import sunxl8.library.swipeback.SwipeBackActivityHelper;
 import sunxl8.library.swipeback.SwipeBackLayout;
 import sunxl8.library.swipeback.Utils;
@@ -29,12 +36,23 @@ public abstract class BaseActivity extends RxAppCompatActivity {
 
     private SwipeBackActivityHelper mHelper;
 
+    protected TextView tvTitle;
+
+    protected AppCompatImageView ivBack;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.mHelper = new SwipeBackActivityHelper(this);
         this.mHelper.onActivityCreate();
         setContentView(setContentViewId());
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        tvTitle = (TextView) findViewById(R.id.tv_title);
+        ivBack = (AppCompatImageView) findViewById(R.id.iv_back);
+        if (ivBack != null) {
+            RxView.clicks(ivBack)
+                    .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
+                    .subscribe(o -> finish());
+        }
         init();
     }
 

@@ -4,6 +4,8 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#33A1C9</color>
 
+    <color name="colorHalfTrans">#44000000</color>
+
     <color name="colorBg">#263238</color>
     <color name="colorTextItem">#E5E5E5</color>
 </resources>
