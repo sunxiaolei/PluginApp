@@ -1,5 +1,8 @@
 package com.sun.xiaolei.plugin.ui;
 
+import android.Manifest;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatDelegate;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +12,7 @@ import android.view.KeyEvent;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemDragListener;
 import com.didi.virtualapk.PluginManager;
@@ -22,6 +26,7 @@ import com.sun.xiaolei.plugin.db.DatabaseHelper;
 import com.sun.xiaolei.plugin.db.model.PluginModel;
 import com.sun.xiaolei.plugin.utils.SchedulersCompat;
 import com.sun.xiaolei.plugin.utils.SnackBarUtils;
+import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
 import org.litepal.crud.DataSupport;
@@ -53,6 +58,10 @@ public class MainActivity extends BaseActivity {
     SwitchCompat switchMode;
 
     private MainAdapter mAdapter;
+
+    private MaterialDialog mPermissionDialog;
+
+    private boolean isPluginLoad = false;
 
     @Override
     protected int setContentViewId() {
@@ -94,6 +103,23 @@ public class MainActivity extends BaseActivity {
             }
         });
 
+        mAdapter.setOnItemChildClickListener((adapter, view, position) -> {
+            new RxPermissions(this)
+                    .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    .subscribe(aBoolean -> {
+                        if (aBoolean) {
+                            PluginModel item = (PluginModel) adapter.getItem(position);
+                            if (isPluginLoad) {
+                                startPlugin(item);
+                            } else {
+                                loadAndStart(item);
+                            }
+                        } else {
+                            mPermissionDialog.show();
+                        }
+                    });
+        });
+
         switchMode.setChecked(SPUtils.getInstance(Constant.SP_NAME).getBoolean(Constant.SP_KEY_MODE, false));
         switchMode.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -105,7 +131,42 @@ public class MainActivity extends BaseActivity {
             recreate();
         });
 
+        mPermissionDialog = new MaterialDialog.Builder(this)
+                .content("跳转到设置去授予必需权限")
+                .positiveText(R.string.sure)
+                .negativeText(R.string.cancel)
+                .onPositive((dialog, which) -> {
+                    Intent localIntent = new Intent();
+                    localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                    localIntent.setData(Uri.fromParts("package", getPackageName(), null));
+                    startActivity(localIntent);
+                })
+                .build();
+
         getPluginList();
+
+        new RxPermissions(this)
+                .request(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                .subscribe(aBoolean -> {
+                    if (aBoolean) {
+                        copyPlugin(mAdapter.getData());
+                    } else {
+                        mPermissionDialog.show();
+                    }
+                });
+
+    }
+
+    private void loadAndStart(PluginModel item) {
+        copyPlugin(mAdapter.getData(), item);
+    }
+
+    private void startPlugin(PluginModel item) {
+        Intent intent = new Intent();
+        intent.setClassName(item.getPkgName(), item.getPkgName() + ".ui.MainActivity");
+        intent.putExtra("data", "Data from main");
+        startActivity(intent);
     }
 
     /**
@@ -127,32 +188,17 @@ public class MainActivity extends BaseActivity {
             pDoubanMoment.setIcRes(R.drawable.ic_plugin_dbmoment);
             test.add(pDoubanMoment);
             DataSupport.saveAll(test);
-            DatabaseHelper.queryPluginList();
         }
-        loadPlugin(test);
-
         mAdapter.setNewData(test);
     }
 
-    /**
-     * 复制并加载
-     */
-    private void loadPlugin(List<PluginModel> plugins) {
+    private void copyPlugin(List<PluginModel> plugins) {
         AssetsUtils.getInstance(this).copyAssetsToSD("plugins", PLUGIN_PATH).setFileOperateCallback(new AssetsUtils.FileOperateCallback() {
             @Override
             public void onSuccess() {
-                for (int i = 0; i < plugins.size(); i++) {
-                    File apk = new File(getExternalStorageDirectory(), PLUGIN_PATH + plugins.get(i).getPkgName() + ".apk");
-                    if (apk.exists()) {
-                        try {
-                            PluginManager.getInstance(MainActivity.this).loadPlugin(apk);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    } else {
-                        Toast.makeText(MainActivity.this, "no found plugin!!!", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                loadPlugins(plugins);
+                isPluginLoad = true;
+
             }
 
             @Override
@@ -160,6 +206,37 @@ public class MainActivity extends BaseActivity {
                 Toast.makeText(MainActivity.this, "copy failed: " + error, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void copyPlugin(List<PluginModel> plugins, PluginModel plugin) {
+        AssetsUtils.getInstance(this).copyAssetsToSD("plugins", PLUGIN_PATH).setFileOperateCallback(new AssetsUtils.FileOperateCallback() {
+            @Override
+            public void onSuccess() {
+                loadPlugins(plugins);
+                isPluginLoad = true;
+                startPlugin(plugin);
+            }
+
+            @Override
+            public void onFailed(String error) {
+                Toast.makeText(MainActivity.this, "copy failed: " + error, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadPlugins(List<PluginModel> plugins){
+        for (int i = 0; i < plugins.size(); i++) {
+            File apk = new File(getExternalStorageDirectory(), PLUGIN_PATH + plugins.get(i).getPkgName() + ".apk");
+            if (apk.exists()) {
+                try {
+                    PluginManager.getInstance(MainActivity.this).loadPlugin(apk);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(MainActivity.this, "no found plugin!!!", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private boolean exitApp = false;

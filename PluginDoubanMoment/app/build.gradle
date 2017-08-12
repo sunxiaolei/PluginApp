@@ -53,6 +53,6 @@ dependencies {
 // 插件配置信息,放在文件最下面
 virtualApk {
     packageId = 0x1f
-    targetHost = '../../PluginMain/app'
+    targetHost = '../../PluginApp/app'
     applyHostMapping = true
 }
